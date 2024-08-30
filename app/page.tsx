@@ -2,6 +2,8 @@
 
 import { isValidYouTubeUrl } from "@/util/validateUrl";
 import { FormEvent, RefObject, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   const [summary, setSummary] = useState("");
@@ -52,14 +54,17 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center gap-6 p-24">
       <h1 className="text-4xl font-bold">Summarize a Video</h1>
-      <form onSubmit={(event) => handleSummary(event, videoUrlRef)}>
-        <input
+
+      <form
+        className="flex flex-row gap-3"
+        onSubmit={(event) => handleSummary(event, videoUrlRef)}
+      >
+        <Input
           type="text"
           placeholder="Enter a YouTube video URL:"
-          className="border border-gray-300 rounded-lg p-2"
           ref={videoUrlRef}
         />
-        <button className="p-4">Summarise</button>
+        <Button className="p-4 ">Summarise</Button>
       </form>
       {error && <p className="text-red-500">{error}</p>}
       <p>Summary:</p>
