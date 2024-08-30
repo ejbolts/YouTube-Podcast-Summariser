@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { YoutubeTranscript } from "youtube-transcript";
-
+import { isValidYouTubeUrl } from "@/util/validateUrl";
 export interface TranscriptResponse {
   transcript: string;
 }
@@ -11,8 +11,15 @@ export interface ErrorResponse {
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
-    const { videoUrl } = await request.json();
-    const videoId = videoUrl.split("=")[1].split("&")[0];
+    const { videoUrl }: { videoUrl: string } = await request.json();
+
+    if (!videoUrl || !isValidYouTubeUrl(videoUrl)) {
+      return NextResponse.json<ErrorResponse>(
+        { error: "Invalid YouTube URL provided." },
+        { status: 400 }
+      );
+    }
+    const videoId = new URL(videoUrl).searchParams.get("v")!;
     const transcript = await YoutubeTranscript.fetchTranscript(videoId);
 
     let fulltext = "";
