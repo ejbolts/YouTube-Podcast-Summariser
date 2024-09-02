@@ -8,7 +8,7 @@ const openai = new OpenAI({
 import { NextRequest } from "next/server";
 import { ErrorResponse } from "../transcript/route";
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(request: NextRequest) {
   try {
     const { transcript } = await request.json();
     const response = await openai.chat.completions.create({

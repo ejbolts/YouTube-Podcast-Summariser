@@ -9,7 +9,7 @@ export interface ErrorResponse {
   error: string;
 }
 
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: Request) {
   try {
     const { videoUrl }: { videoUrl: string } = await request.json();
 
