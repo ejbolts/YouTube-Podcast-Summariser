@@ -4,10 +4,13 @@ import { ddbDocClient } from "@/lib/dynamodb";
 import { NextRequest, NextResponse } from "next/server";
 import { ErrorResponse } from "../transcript/route";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
 export async function POST(request: NextRequest) {
+  const saltRounds = 10;
   try {
     const body = await request.json();
     const { username, email, password } = body;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const params = {
       TableName: process.env.DB_NAME,
@@ -15,7 +18,7 @@ export async function POST(request: NextRequest) {
         userID: uuidv4(),
         username: username,
         email: email,
-        password: password,
+        password: hashedPassword,
       },
     };
 
